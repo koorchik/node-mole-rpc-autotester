@@ -65,6 +65,37 @@ async function asyncFunctionLongRunning(arg1, arg2) {
     });
 }
 
+async function asyncFunctionRejectsWithPrimitiveData(arg1, arg2) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const result = `args data "${arg1} ${arg2}" from asyncFunctionRejectsWithPrimitiveData`;
+
+            reject(result);
+        }, 100);
+    });
+}
+
+async function asyncFunctionRejectsWithComplexData(...args) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const result = {
+                from: 'asyncFunctionRejectsWithComplexData',
+                args
+            };
+
+            reject(result);
+        }, 100);
+    });
+}
+
+async function asyncFunctionThrowsError() {
+    throw new Error('asyncFunctionThrowsError');
+}
+
+async function asyncFunctionThrowsString() {
+    throw 'asyncFunctionThrowsString';
+}
+
 function _privateFunction() {
     return 'Function which starts with "_" will not be exposed';
 }
@@ -78,6 +109,10 @@ module.exports = {
         asyncFunctionComplexData,
         asyncFunctionLongRunning,
         functionReturnsUndefined,
+        asyncFunctionRejectsWithPrimitiveData,
+        asyncFunctionRejectsWithComplexData,
+        asyncFunctionThrowsError,
+        asyncFunctionThrowsString,
         _privateFunction
     },
     lastResultsStore

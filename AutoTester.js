@@ -9,14 +9,25 @@ const positiveTestsData = require('./exposeFunctions/positiveTestsData');
 const negativeTestsData = require('./exposeFunctions/negativeTestsData');
 
 class AutoTester {
-    constructor({ simpleClient, proxifiedClient, server }) {
+    constructor({ simpleClient, proxifiedClient, server, X }) {
         if (!simpleClient) throw new Error('"simpleClient" required');
         if (!proxifiedClient) throw new Error('"proxifiedClient" required');
         if (!server) throw new Error('"server" required');
+        if (!X) throw new Error('"X" exceptions object required');
+
+
+        if (simpleClient.requestTimeout !== 1000) {
+            throw new Error('"simpleClient" requestTimeout must be set to 1000')
+        }
+
+        if (proxifiedClient['options.requestTimeout'] !== 1000) {
+            throw new Error('"proxifiedClient" requestTimeout must be set to 1000')
+        }
 
         this.simpleClient = simpleClient;
         this.proxifiedClient = proxifiedClient;
         this.server = server;
+        this.X = X;
     }
 
     async runAllTests() {
@@ -119,7 +130,7 @@ class AutoTester {
     }
 
     async _runSimpleNegativeTests(client, negativeTestsData) {
-        for (const { callMethod, args, expectedError, expectedClass } of negativeTestsData) {
+        for (const { callMethod, args, expectedError, expectedClassName } of negativeTestsData) {
             try {
                 console.log(`Negative test: calling ${callMethod}`);
                 await client.callMethod(callMethod, args);
@@ -127,16 +138,20 @@ class AutoTester {
                     `Method "${callMethod}" should fail but was executed without any error`
                 );
             } catch (gotError) {
-                assert.instanceOf(gotError, expectedClass, 'check error class');
+                assert.instanceOf(gotError, this.X[expectedClassName], 'check error class');
                 assert.deepEqual(gotError.message, expectedError.message, 'check error message');
                 assert.deepEqual(gotError.code, expectedError.code, 'check error code');
+
+                if (expectedError.data) {
+                    assert.deepEqual(gotError.data, expectedError.data, 'check custom data');
+                }
             }
         }
         console.log('\n');
     }
 
     async _runProxyNegativeTests(client, negativeTestsData) {
-        for (const { callMethod, args, expectedError, expectedClass } of negativeTestsData) {
+        for (const { callMethod, args, expectedError, expectedClassName } of negativeTestsData) {
             try {
                 console.log(`Negative test via proxy: calling ${callMethod}`);
                 await client[callMethod](...args);
@@ -144,7 +159,7 @@ class AutoTester {
                     `Method "${callMethod}" should fail but was executed without any error`
                 );
             } catch (gotError) {
-                assert.instanceOf(gotError, expectedClass, 'check error class');
+                assert.instanceOf(gotError, this.X[expectedClassName], 'check error class');
                 assert.deepEqual(gotError.message, expectedError.message, 'check error message');
                 assert.deepEqual(gotError.code, expectedError.code, 'check error code');
             }

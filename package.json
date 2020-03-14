@@ -11,10 +11,7 @@
         "node": ">=10.0.0"
     },
     "dependencies": {
-        "chai": "*"
-    },
-    "peerDependencies": {
-        "mole-rpc": "*"
+        "chai": "^4.2.0"
     },
     "scripts": {
         "test": "node ./tests/autotests.js || exit 1"
