@@ -1,12 +1,8 @@
 {
     "name": "mole-rpc-autotester",
-    "version": "0.3.5",
+    "version": "1.0.0",
     "description": "Automatic tester for mole-rpc transport packages",
     "main": "AutoTester.js",
-    "directories": {
-        "lib": "lib",
-        "test": "tests"
-    },
     "engines": {
         "node": ">=10.0.0"
     },
@@ -14,7 +10,7 @@
         "chai": "^4.2.0"
     },
     "scripts": {
-        "test": "node ./tests/autotests.js || exit 1"
+        "test": "echo 'This module is tests itself'"
     },
     "repository": {
         "type": "git",
