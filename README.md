@@ -1,4 +1,4 @@
-# node-mole-rpc-autotester
+# mole-rpc-autotester
 Automatic tester for [Mole-RPC](https://www.npmjs.com/package/mole-rpc) (JSON-RPC library) transports.
 
 If you writes own transport for Mole-RPC then use this module to be sure that your transport covers as expected.
