@@ -40,40 +40,40 @@ const TransportClient = require('./TransportClient');
 const TransportServer = require('./TransportServer');
 
 async function main() {
-    const server = await prepareServer();
-    const clients = await prepareClients();
+  const server = await prepareServer();
+  const clients = await prepareClients();
 
-    const autoTester = new AutoTester({
-        X,
-        server,
-        simpleClient: clients.simpleClient,
-        proxifiedClient: clients.proxifiedClient
-    });
+  const autoTester = new AutoTester({
+    X,
+    server,
+    simpleClient: clients.simpleClient,
+    proxifiedClient: clients.proxifiedClient
+  });
 
-    await autoTester.runAllTests();
+  await autoTester.runAllTests();
 }
 
 async function prepareServer() {
-    return new MoleServer({
-        transports: [
-            // initialize your transports
-            new TransportServer(...)
-        ]
-    });
+  return new MoleServer({
+    transports: [
+        // initialize your transports
+        new TransportServer(...)
+    ]
+  });
 }
 
 async function prepareClients() {
-    const simpleClient = new MoleClient({
-        requestTimeout: 1000, // autotester expects this value
-        transport: new TransportClient(...) // initialize your transport
-    });
+  const simpleClient = new MoleClient({
+    requestTimeout: 1000, // autotester expects this value
+    transport: new TransportClient(...) // initialize your transport
+  });
 
-    const proxifiedClient = new MoleClientProxified({
-        requestTimeout: 1000, // autotester expects this value
-        transport: new TransportClient(...) // initialize your transport
-    });
+  const proxifiedClient = new MoleClientProxified({
+    requestTimeout: 1000, // autotester expects this value
+    transport: new TransportClient(...) // initialize your transport
+  });
 
-    return { simpleClient, proxifiedClient };
+  return { simpleClient, proxifiedClient };
 }
 
 main().then(console.log, console.error);
@@ -87,4 +87,4 @@ main().then(console.log, console.error);
 * [WS transport tests](https://github.com/koorchik/node-mole-rpc-transport-ws/tree/master/tests). This is the most interesting as it has autotests for different modes.
 
 
-You can find more tranports [here](https://www.npmjs.com/search?q=mole-rpc-transport)
+You can find more tranports [here](https://www.npmjs.com/search?q=keywords:mole-transport)
