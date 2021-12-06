@@ -34,7 +34,7 @@ module.exports = [
             code: -32001,
             message: 'Request exceeded maximum execution time'
         },
-        expectedClassName: 'RequestTimout'
+        expectedClassName: 'RequestTimeout'
     },
 
     {
