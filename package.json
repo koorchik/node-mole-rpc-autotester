@@ -1,6 +1,6 @@
 {
     "name": "mole-rpc-autotester",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Automatic tester for mole-rpc transport packages",
     "main": "AutoTester.js",
     "engines": {
