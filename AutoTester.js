@@ -31,13 +31,16 @@ class AutoTester {
     }
 
     async runAllTests() {
+        console.log('Autotests started.');
+        console.log('============================================================');
+
         await this._exposeServerMethods();
 
         // POSITIVE TESTS
         console.log('Run simple positive tests for simpleClient:');
         await this._runSimplePositiveTests(this.simpleClient, positiveTestsData);
 
-        console.log('Run simple positive notification tests for simpleClient');
+        console.log('Run simple positive notification tests for simpleClient:');
         await this._runSimplePositiveNotificationTests(this.simpleClient, positiveTestsData);
 
         console.log('Run positive batch tests for simpleClient:');
@@ -46,13 +49,13 @@ class AutoTester {
         console.log('Run simple positive tests for proxifiedClient:');
         await this._runSimplePositiveTests(this.proxifiedClient, positiveTestsData);
 
-        console.log('Run simple positive notification tests for proxifiedClient');
+        console.log('Run simple positive notification tests for proxifiedClient:');
         await this._runSimplePositiveNotificationTests(this.proxifiedClient, positiveTestsData);
 
         console.log('Run proxy positive tests for proxifiedClient:');
         await this._runProxyPositiveTests(this.proxifiedClient, positiveTestsData);
 
-        console.log('Run proxy positive notification tests for proxifiedClient');
+        console.log('Run proxy positive notification tests for proxifiedClient:');
         await this._runProxyPositiveNotificationTests(this.proxifiedClient, positiveTestsData);
 
         // NEGATIVE TESTS
@@ -64,6 +67,16 @@ class AutoTester {
 
         console.log('Run proxy negative tests for proxifiedClient:');
         await this._runProxyNegativeTests(this.proxifiedClient, negativeTestsData);
+
+        // PING PONG TESTS
+        console.log('Run ping pong tests for simpleClient.');
+        await this._runPingPongTests(this.simpleClient);
+
+        console.log('Run ping pong tests for proxifiedClient.');
+        await this._runPingPongTests(this.proxifiedClient);
+
+        console.log('============================================================');
+        console.log('Autotests finished.');
     }
 
     async _exposeServerMethods() {
@@ -165,6 +178,16 @@ class AutoTester {
             }
         }
         console.log('\n');
+    }
+
+    async _runPingPongTests(client) {
+        if (!client.ping) {
+            throw new Error('Ping method is not supported. Update mole-rpc package!');
+        }
+
+        const result = await client.ping();
+
+        assert.equal(result, true);
     }
 }
 
